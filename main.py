@@ -1,17 +1,26 @@
 from tkinter import *
-
+from tkinter import messagebox
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 def write_pass():
-    info = f"Website: {web_ent.get()} \nEmail/Username: {eun_ent.get()} \nPass: {pass_ent.get()}"
+    website = web_ent.get()
+    eun = eun_ent.get()
+    password = pass_ent.get() 
+    info = f"Website: {website} \nEmail/Username: {eun} \nPass: {password}\n\n"
     print(info)
-    with open("passtext_py.txt", mode="w") as file:
-        file.write(info)
 
-    web_ent.delete(0,END)
-    pass_ent.delete(0,END)
+    if len(website)<3 or len(password)<5:
+        messagebox.showinfo(title="Missing Fields", message="Please do not leave fields empty")
+    else:
+        is_ok = messagebox.askokcancel(title=website, message=f"These are the details entered: {info}Is it OK to save?") 
+        
+        if is_ok:
+            with open("passtext_py.txt", mode="a") as file:
+                file.write(info)
+                web_ent.delete(0,END)
+                pass_ent.delete(0,END)
 # ---------------------------- UI SETUP ------------------------------- #
 
 window = Tk()
