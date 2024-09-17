@@ -1,33 +1,24 @@
 from tkinter import *
 from tkinter import messagebox
 import random as rd
+import pyperclip
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
-def genpass_rd():    
+def genpass_rd():
+    pass_ent.delete(0,END)    
     letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
     numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
     symbols = ['!', '#', '$', '%', '&', '(', ')', '*', '+']
 
-    nr_letters = rd.randint(8,10)
-    nr_symbols = rd.randint(2,4)
-    nr_numbers = rd.randint(2,4)
+    rd_pass_l = [rd.choice(letters) for rep in range(rd.randint(8,10))]
+    rd_pass_s = [rd.choice(numbers) for rep in range(rd.randint(2,4))]
+    rd_pass_n = [rd.choice(symbols) for rep in range(rd.randint(2,4))]
 
-    rd_pass = []
+    password_list = rd_pass_l+rd_pass_n+rd_pass_s
+    rd.shuffle(password_list)
 
-    for rep in range(nr_letters):
-        rd_letter = rd.choice(letters)
-        rd_pass.append(rd_letter) 
-    for rep in range(nr_numbers):
-        rd_num = rd.choice(numbers)
-        rd_pass.append(rd_num)
-    for rep in range(nr_symbols): 
-        rd_sym = rd.choice(symbols)
-        rd_pass.append(rd_sym) 
-
-    rd.shuffle(rd_pass)
-
-    password = ''.join(rd_pass)
-    print()
+    password = ''.join(password_list)
     pass_ent.insert(0, password)
+    pyperclip.copy(password)
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 def write_pass():
