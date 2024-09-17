@@ -3,3 +3,49 @@
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 
 # ---------------------------- UI SETUP ------------------------------- #
+
+from tkinter import *
+
+
+def write_pass():
+    print(f"Website: {web_ent.get()}",f"Email/Username: {eun_ent.get()}",f"Pass: {pass_ent.get()}")
+
+
+window = Tk()
+window.title("Password Manager")
+window.config(padx=50, pady=50)
+
+#create a canvas & an image
+canvas = Canvas(width=200, height=200, highlightthickness=0)
+logo_pic = PhotoImage(file="logo.png")
+canvas.create_image(100, 100, image = logo_pic)
+
+# labels
+web_lbl = Label(text="Website:")
+eun_lbl = Label(text="Email/Username: ")
+pass_lbl = Label(text="Password: ") 
+
+#entry fields
+web_ent = Entry(width=51)
+eun_ent = Entry(width=51)
+pass_ent = Entry(width=33)
+
+#button
+genpass_btn = Button(text="Generate Password")
+addpass_btn = Button(text="Add", width=43,command=write_pass)
+
+
+#UI Layout
+canvas.grid(column=1, row=0)
+web_lbl.grid(column=0, row=1)
+eun_lbl.grid(column=0, row=2)
+pass_lbl.grid(column=0, row=3)
+
+web_ent.grid(column=1, row=1, columnspan = 2)
+eun_ent.grid(column=1, row=2, columnspan = 2)
+pass_ent.grid(column=1, row=3)
+
+genpass_btn.grid(column=2, row=3)
+addpass_btn.grid(column=1, row=4, columnspan = 2)
+
+window.mainloop()
