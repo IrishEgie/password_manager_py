@@ -1,15 +1,18 @@
-# ---------------------------- PASSWORD GENERATOR ------------------------------- #
-
-# ---------------------------- SAVE PASSWORD ------------------------------- #
-
-# ---------------------------- UI SETUP ------------------------------- #
-
 from tkinter import *
 
 
-def write_pass():
-    print(f"Website: {web_ent.get()}",f"Email/Username: {eun_ent.get()}",f"Pass: {pass_ent.get()}")
+# ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
+# ---------------------------- SAVE PASSWORD ------------------------------- #
+def write_pass():
+    info = f"Website: {web_ent.get()} \nEmail/Username: {eun_ent.get()} \nPass: {pass_ent.get()}"
+    print(info)
+    with open("passtext_py.txt", mode="w") as file:
+        file.write(info)
+
+    web_ent.delete(0,END)
+    pass_ent.delete(0,END)
+# ---------------------------- UI SETUP ------------------------------- #
 
 window = Tk()
 window.title("Password Manager")
@@ -27,7 +30,9 @@ pass_lbl = Label(text="Password: ")
 
 #entry fields
 web_ent = Entry(width=51)
+web_ent.focus()
 eun_ent = Entry(width=51)
+eun_ent.insert(0, "hotpepoy@gmail.com")
 pass_ent = Entry(width=33)
 
 #button
