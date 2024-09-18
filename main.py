@@ -35,27 +35,33 @@ def write_pass():
             "password":password
         }
     }
-
-    if len(website)<3 or len(password)<5:
+    # Basic input validation for website and password length
+    if len(website) < 3 or len(password) < 5:
         messagebox.showinfo(title="Missing Fields", message="Please do not leave fields empty")
     else:
-        # is_ok = messagebox.askokcancel(title=website, message=f"These are the details entered: {info}Is it OK to save?") 
-        
-        with open("passtext_py.json", mode="r") as file:
-            # file.write(info)
-            #read data
-            data = json.load(file)
-            # print(data)
-            #update data
+        try:
+            # Try to read the existing data from the file
+            with open("passtext_py.json", mode="r") as file:
+                # Check if the file is empty before loading
+                content = file.read().strip()
+                if content:
+                    data = json.loads(content)
+                else:
+                    data = {}
+        except FileNotFoundError:
+            # If the file is not found, create a new one
+            with open("passtext_py.json", mode="w") as file:
+                json.dump(new_data, file, indent=4)
+            print("File not found, creating new passtext_py.json file!")
+        else:
+            # Update existing data with the new entry
             data.update(new_data)
-
-        with open("passtext_py.json", mode="w") as file:
-            #save the data    
-            json.dump(data, file,indent=4)
-
-
-            web_ent.delete(0,END)
-            pass_ent.delete(0,END)
+            with open("passtext_py.json", mode="w") as file:
+                json.dump(data, file, indent=4)
+        finally:
+            # Clear the input fields after saving
+            web_ent.delete(0, END)
+            pass_ent.delete(0, END)
 # ---------------------------- UI SETUP ------------------------------- #
 
 window = Tk()
