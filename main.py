@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 import random as rd
 import pyperclip
+import json
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 def genpass_rd():
     pass_ent.delete(0,END)    
@@ -26,18 +27,35 @@ def write_pass():
     eun = eun_ent.get()
     password = pass_ent.get() 
     info = f"Website: {website} \nEmail/Username: {eun} \nPass: {password}\n\n"
-    print(info)
+    # print(info)
+
+    new_data = {
+        website: {
+            "email":eun,
+            "password":password
+        }
+    }
 
     if len(website)<3 or len(password)<5:
         messagebox.showinfo(title="Missing Fields", message="Please do not leave fields empty")
     else:
-        is_ok = messagebox.askokcancel(title=website, message=f"These are the details entered: {info}Is it OK to save?") 
+        # is_ok = messagebox.askokcancel(title=website, message=f"These are the details entered: {info}Is it OK to save?") 
         
-        if is_ok:
-            with open("passtext_py.txt", mode="a") as file:
-                file.write(info)
-                web_ent.delete(0,END)
-                pass_ent.delete(0,END)
+        with open("passtext_py.json", mode="r") as file:
+            # file.write(info)
+            #read data
+            data = json.load(file)
+            # print(data)
+            #update data
+            data.update(new_data)
+
+        with open("passtext_py.json", mode="w") as file:
+            #save the data    
+            json.dump(data, file,indent=4)
+
+
+            web_ent.delete(0,END)
+            pass_ent.delete(0,END)
 # ---------------------------- UI SETUP ------------------------------- #
 
 window = Tk()
