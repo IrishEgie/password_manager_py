@@ -58,10 +58,54 @@ def write_pass():
             data.update(new_data)
             with open("passtext_py.json", mode="w") as file:
                 json.dump(data, file, indent=4)
+            print(info)
         finally:
             # Clear the input fields after saving
             web_ent.delete(0, END)
             pass_ent.delete(0, END)
+
+# ---------------------------- SEARCH ------------------------------- #
+import json
+from tkinter import messagebox
+
+def search_data():
+    website = web_ent.get().lower()  # Convert to lowercase for case-insensitive search
+
+    try:
+        # Attempt to open and read the JSON file
+        with open("passtext_py.json", "r") as file:
+            content = file.read().strip()  # Strip leading/trailing whitespace
+            
+            # Check if the file is empty
+            if not content:
+                messagebox.showinfo(title="Error", message="The JSON file is empty.")
+                return  # Exit the function if the file is empty
+
+            # Load the data from the file
+            data = json.loads(content)
+
+    except FileNotFoundError:
+        messagebox.showinfo(title="Error", message="The file was not found.")
+        return
+
+    except json.JSONDecodeError:
+        messagebox.showinfo(title="Error", message="Error decoding JSON file.")
+        return
+
+    # Now search the data for the website (approximate search)
+    matches = {site: details for site, details in data.items() if website in site.lower()}
+
+    if matches:
+        # If matching websites are found, show their details in the messagebox
+        for site, details in matches.items():
+            messagebox.showinfo(title=f"Found: {site}", message=f"Website: {site}\nEmail: {details['email']}\nPassword: {details['password']}")
+            pyperclip.copy(details['password'])
+            print(f"Found! {site}", f"\nWebsite: {site}\nEmail: {details['email']}\nPassword: {details['password']}\nPassword Copied to clipboard")
+    else:
+        # If no matching website is found
+        messagebox.showinfo(title="Not Found", message="No matching website found.")
+
+
 # ---------------------------- UI SETUP ------------------------------- #
 
 window = Tk()
@@ -79,13 +123,14 @@ eun_lbl = Label(text="Email/Username: ")
 pass_lbl = Label(text="Password: ") 
 
 #entry fields
-web_ent = Entry(width=51)
+web_ent = Entry(width=33)
 web_ent.focus()
 eun_ent = Entry(width=51)
 eun_ent.insert(0, "hotpepoy@gmail.com")
 pass_ent = Entry(width=33)
 
 #button
+search_btn = Button(text="Search", width=14, command=search_data)
 genpass_btn = Button(text="Generate Password", command=genpass_rd)
 addpass_btn = Button(text="Add", width=43,command=write_pass)
 
@@ -96,10 +141,11 @@ web_lbl.grid(column=0, row=1)
 eun_lbl.grid(column=0, row=2)
 pass_lbl.grid(column=0, row=3)
 
-web_ent.grid(column=1, row=1, columnspan = 2)
+web_ent.grid(column=1, row=1)
 eun_ent.grid(column=1, row=2, columnspan = 2)
 pass_ent.grid(column=1, row=3)
 
+search_btn.grid(column=2, row=1)
 genpass_btn.grid(column=2, row=3)
 addpass_btn.grid(column=1, row=4, columnspan = 2)
 
